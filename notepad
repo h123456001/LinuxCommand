@@ -1,0 +1,115 @@
+linux终端内常用但我未知或不熟练命令
+
+Ctrl +s 停止屏幕 输出比如在更新 50% 。。。55 %   会 停止显示
+Ctrl +q 允许屏幕输出  再次显示 进度
+Ctrl+z 挂起程序（暂停）的并放置在后台  
+jobs 查看后台进程 使用 fg 【id号】 继续运行
+
+光标移动 
+Ctrl+A 到行首
+Ctrl+E 到行尾
+Alt +A 移动 光标到 单前单词头部
+Alt +E 移动 光标到 单前单词结尾
+Ctrl+f （向→移动）
+Alt+f  （向→移动一个词）--ubuntu测试失败
+
+编辑 （此处单词表示空格分隔的意思）
+Ctrl+K 删除 光标到行尾
+Ctrl+U 删除 光标到行首
+Alt +D 删除 光标到单前单词结尾
+（123 456 789光标在2）-执行后 （1 456 789）
+Ctrl+W 删除 光标到当前单词头部
+（123 456 789光标在2）-执行后 （23 456 789）
+Ctrl+Y 插图最近删除的单词（字符）
+
+Ctrl+Z到后台
+任务调度jobbing 或后台background
+&符号也
+
+命令执行顺序
+控制字符（;  &&  || &）
+& 让命令在后台运行
+；分好 按顺序执行
+&& 依赖前置命令执行 成功 后 才执行 下一个命令
+||     依赖前置命令执行 失败 后 才执行 下一个命令 
+
+
+export AAA=‘阿萨德’
+readonly AAA  设置后AAA无法删除和修改 shell 生命周期
+
+四个路径缩写
+.. 上一层目录
+.  当前目录
+~ home目录
+-  上一个工作目录
+cd !$ 上一个命令的参数作为命令使用 
+先执行（cd /etc）  ls  -cd !$ =cd /etc）
+
+ls -ltr 按修改时间和文件详细信息
+ls -lR /home 将/home目录下所有目录以及文件详细资料列出
+ls -AF 列出目前目录下所有文件及目录； (可执行文件名结尾会显示*  目录后显示 /)
+ls -lh 增强对文件大小易读性，以(k m)等显示大小
+
+mkdir -p 自动创建不纯在的目录 递归创建				
+mkidr -m 目录权限(mkdir -m 777 test3)   777 最高权限 777 解读 二进制111 111 111 读写执行
+
+
+cp -a 通常复制目录 保留链接 文件属性 ，兵复制目录下所有内容提供
+cp -d 复制时保留链接   类似复制个快捷方式 -s软连接 （soft）  -l 硬链接（ln） 
+cp -f 覆盖已经存在目标 不提示
+cp -i  提示
+cp -r 递归目录拷贝 但是文件权属可能会发生改变
+cp -a 目录后所有文件（目录）类似-dR
+
+cp -u 配合-i    cp -ui复制前比对文件差异  相同无提示 不复制 不同则复制
+tree -L 层数  （tree -L 2 显示2层）
+
+mv -b 若覆盖则 覆盖之前 进行备份
+mv -f force强制 无提示
+mv -u 类似cp-u
+
+touch txt{1..5}  会创建txt1 txt2 txt3 txt4 txt5
+stat txt 查看文件属性 Access 为访问时间cat 同样会修改他
+
+file  识别文件类型，编码格式 通过识别文件头 非后缀
+file install.log 
+	log：ASCII text
+file abc.pdf
+	abc.pdf:PDF document ,version 1.4
+file image.tar.gz
+	image.tar.gz:gzip compressed data,last modified:Sun Jul 21 02:40:56 2019 from Unix
+
+
+ln命令  快捷方式 软连接 硬链接 windows下为.lnk
+硬链接（别名 可以多个 不占用空间  不能给目录用）  
+符号链接（软连接 类似快捷方式可以对目录和文件系统，最好用全路径）
+ln 类似cp  源  目的   软连接 用-s  
+ln -s log loglnk 
+
+which文件查找命令 在path 变量中
+which -a (all) pwd
+whereis 查找文件 locate 在系统中  在内建数据库中查找二进制 源文件 帮助  通过updatedb更新数据库
+	-b   只查找二进制文件
+	-m  只查找帮助说明文件 man手册
+	-s   只查找源代码文件如.c  
+	whereis bash
+locate命令 也是类似whereis 数据库索引所有文件
+locate pwd 列出所有带pwd文件和目录
+locate /etc/sh 所有etc下以sh开头的文件和目录
+
+find 是磁盘中 速度慢 
+ -name: 按文件名 全匹配 使用"xxx*"通配符才可批量匹配
+	还可以用正则表达式（待学习）
+	如当前目录一个小写字母开头，最后4到9加上.log结束的文件
+	find . -name "[a-z]*[4-9].log" -print
+ -size   :按文件大小 
+	如搜索当前目录下 ＜1K的文件 ＞10M
+	find . -size -1K 
+	find . -size +10M 	
+ -perm :按文件权限
+ -type  :按文件类型
+ -mtime：按文件修改时间属性  在/var/adm目录下查找更改时间在3天以前（4天5天6天到1970年） 的文件+3
+ -atime：按文件add时间属性	同理可以更上+- 符号 -7 =7天内（6天5天4天3天2天1天）含不含7需要自己测试
+	find /var/amd -mtime +3
+find -iname 不区分文件名大小写
+find /etc -name pam.conf 
